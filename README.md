@@ -2,11 +2,11 @@
 
 ![](https://github.com/Asadulloh-pro/anysolve/assets/logo.svg)
 
-`$ npm install aopros axios zustand`
+`$ npm install anysolve axios zustand`
 
 ### useAllStore (Zustand)
 
-```javascipt
+```javascript
 // export module types
 export type modulesType = {
   customers: CustomersStoreType;

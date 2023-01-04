@@ -1,6 +1,6 @@
 import { StoreApi, UseBoundStore } from 'zustand';
 import { Services } from '../services';
-import { createDataType, DeleteDialog, drawerAction, getDataType, IAos_config, NavigateFunction, showSnakebarType, StoreType } from '../types';
+import { createDataType, DeleteDialog, drawerAction, getDataType, IAos_config, NavigateFunction, StoreType } from '../types';
 export default class Aos<ST_T> {
     services: Services;
     useAllStore: (type: keyof ST_T) => UseBoundStore<StoreApi<ST_T[keyof ST_T] | StoreType>>;
@@ -8,7 +8,6 @@ export default class Aos<ST_T> {
         [P in keyof ST_T]: string;
     };
     useDialog: UseBoundStore<StoreApi<DeleteDialog>>;
-    showSnakebar: showSnakebarType;
     constructor(config: IAos_config<keyof ST_T, ST_T[keyof ST_T], {
         [P in keyof ST_T]: string;
     }>);

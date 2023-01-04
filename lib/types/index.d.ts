@@ -1,7 +1,7 @@
 import { AxiosHeaders } from 'axios';
 import { StoreApi, UseBoundStore } from 'zustand';
 export interface IErrorHandle {
-    errorAlert: (message: string) => void;
+    messageAlert: (message: string) => void;
 }
 type getParamsType = {
     [k: string]: string;
@@ -27,7 +27,6 @@ export interface IShowSnakebar {
     text: string;
     type: 'success' | 'info' | 'warning' | 'danger';
 }
-export type showSnakebarType = ({ title, text, type, }: IShowSnakebar) => Promise<any>;
 export type Delete = {
     isOpen: boolean;
     info?: {
@@ -50,7 +49,6 @@ export type IAos_config<MD_T, ST_T, API_T> = {
     store: (type: MD_T) => UseBoundStore<StoreApi<ST_T | StoreType>>;
     apiUrls: API_T;
     useDialog: UseBoundStore<StoreApi<DeleteDialog>>;
-    showSnakebar: showSnakebarType;
 };
 export type drawerAction<IN_T, MD_T> = {
     action: boolean;

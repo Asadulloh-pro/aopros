@@ -1,7 +1,5 @@
 # Anysolve
 
-![](https://github.com/Asadulloh-pro/anysolve/blob/main/assets/logo.svg)
-
 `$ npm install anysolve axios zustand`
 
 ### useAllStore (Zustand)

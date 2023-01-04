@@ -1,9 +1,3 @@
+import Aos from "./layouts/Aos"
 
-
-const sayHello = () => {
-  console.log('Hello world')
-}
-
-export {
-  sayHello
-}
+export default Aos

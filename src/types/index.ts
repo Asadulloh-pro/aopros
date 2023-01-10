@@ -13,6 +13,7 @@ export type getDataType<MD_T, AST_T> = {
   path?: string;
   customPath?: string;
   setError?: (error: unknown) => void;
+  ignoreError?: boolean;
 };
 
 export type createDataType<MD_T, AST_T> = {

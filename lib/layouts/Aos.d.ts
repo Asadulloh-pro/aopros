@@ -11,7 +11,7 @@ export default class Aos<ST_T> {
     constructor(config: IAos_config<keyof ST_T, ST_T[keyof ST_T], {
         [P in keyof ST_T]: string;
     }>);
-    getData<T>({ params, moduleType, stateName, path, customPath, setError, }: getDataType<keyof ST_T, T>): Promise<any>;
+    getData<T>({ params, moduleType, stateName, path, customPath, setError, ignoreError }: getDataType<keyof ST_T, T>): Promise<any>;
     createData<T>({ data, moduleType, stateName, path, customPath, }: createDataType<keyof ST_T, T>): Promise<unknown>;
     updateData<T>({ data, moduleType, stateName, path, customPath, }: createDataType<keyof ST_T, T>): Promise<unknown>;
     deleteData(moduleType: keyof ST_T, path?: string, customPath?: string): Promise<unknown>;

@@ -1,6 +1,6 @@
 {
   "name": "anysolve",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "This package is my professional structure and I will try to make all the logic in this package.",
   "types": "lib",
   "type": "commonjs",

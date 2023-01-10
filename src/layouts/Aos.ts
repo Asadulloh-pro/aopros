@@ -44,6 +44,7 @@ export default class Aos<
     path,
     customPath,
     setError,
+    ignoreError
   }: getDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleType);
     setState({ loading: true });
@@ -60,10 +61,12 @@ export default class Aos<
         return response?.data;
       }
     } catch (err) {
-      if (setError) {
-        setError(err);
-      } else {
-        setState({ statusError: err });
+      if(!ignoreError) {
+        if (setError) {
+          setError(err);
+        } else {
+          setState({ statusError: err });
+        }
       }
     } finally {
       setState({ loading: false });

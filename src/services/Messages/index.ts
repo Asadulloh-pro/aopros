@@ -11,31 +11,21 @@ export class Messages {
       return Promise.reject(error);
     }
     if (
-      error.response.status === 403 ||
-      error.response.status === 401 ||
-      error.response.status === 400
+      error.response?.data?.statusCode === 403 ||
+      error.response?.data?.statusCode  === 401 ||
+      error.response?.data?.statusCode  === 500 ||
+      error.response?.data?.statusCode  === 400
     ) {
-      //Invalid token, or expired state
-      this.messageAlert(error.response.data.message, "danger");
+      this.messageAlert(error.response.data?.message, "danger");
       return;
     }
 
-    // // const data = error.response.data
+    if (error.response?.data?.statusCode === 422) {
+      const errorBody = error.response?.data?.message;
+      errorBody.forEach((message: string) => {
+        this.messageAlert(message, "danger");
+      });
 
-    if (error.response.status === 404) {
-      // Not found
-      this.messageAlert("404 Not foud", "danger");
-    }
-
-    if (error.response.status === 500) {
-      this.messageAlert("Внутренняя ошибка сервера 500", "danger");
-      return;
-    }
-
-    if (error.response.status === 400) {
-      const errorBody = error.response.data;
-
-      this.messageAlert(errorBody, "danger");
     }
 
     return Promise.reject(error);

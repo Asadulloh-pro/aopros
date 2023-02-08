@@ -13,6 +13,7 @@ export class Messages {
     if (
       error.response?.data?.statusCode === 403 ||
       error.response?.data?.statusCode  === 401 ||
+      error.response?.data?.statusCode  === 404 ||
       error.response?.data?.statusCode  === 500 ||
       error.response?.data?.statusCode  === 400
     ) {

@@ -33,7 +33,7 @@ export class Messages {
   }
 
   public successMessage(response: AxiosResponse) {
-    if (response?.status === 201 || response?.status === 202) {
+    if (response?.status === 201 || response?.status === 202  || response?.status === 204) {
       this.messageAlert(response?.statusText, "success");
     }
   }

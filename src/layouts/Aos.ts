@@ -17,9 +17,6 @@ export default class Aos<
   useAllStore: (
     type: keyof ST_T
   ) => UseBoundStore<StoreApi<ST_T[keyof ST_T] | StoreType>>;
-  apiUrls: {
-    [P in keyof ST_T]: string;
-  };
   useDialog: UseBoundStore<StoreApi<DeleteDialog>>;
 
   constructor(
@@ -33,24 +30,21 @@ export default class Aos<
   ) {
     this.services = new Services(config?.services);
     this.useAllStore = config.store;
-    this.apiUrls = config.apiUrls;
     this.useDialog = config.useDialog;
   }
 
-  public async getData<T>({
+  public async fetchData<T>({
     params,
-    moduleType,
+    moduleName,
     stateName,
     path,
-    customPath,
     setError,
     ignoreError
   }: getDataType<keyof ST_T, T>) {
-    const { setState } = this.useAllStore(moduleType);
+    const { setState } = this.useAllStore(moduleName);
     setState({ loading: true });
     try {
-      const response = await this.services.fetch(
-        this.generateApi(moduleType, path, customPath),
+      const response = await this.services.fetch(path,
         {
           params,
         }
@@ -73,17 +67,15 @@ export default class Aos<
     }
   }
 
-  public async createData<T>({
+  public async postData<T>({
     data,
-    moduleType,
+    moduleName,
     stateName,
     path,
-    customPath,
   }: createDataType<keyof ST_T, T>) {
-    const { setState } = this.useAllStore(moduleType);
+    const { setState } = this.useAllStore(moduleName);
     try {
-      const result = await this.services.create(
-        this.generateApi(moduleType, path, customPath),
+      const result = await this.services.create(path,
         data
       );
       if (stateName) {
@@ -102,18 +94,16 @@ export default class Aos<
     }
   }
 
-  public async updateData<T>({
+  public async putData<T>({
     data,
-    moduleType,
+    moduleName,
     stateName,
     path,
-    customPath,
   }: createDataType<keyof ST_T, T>) {
-    const { setState } = this.useAllStore(moduleType);
+    const { setState } = this.useAllStore(moduleName);
 
     try {
-      const result = await this.services.update(
-        this.generateApi(moduleType, path, customPath),
+      const result = await this.services.update(path,
         data
       );
       if (stateName) {
@@ -133,15 +123,12 @@ export default class Aos<
   }
 
   public async deleteData(
-    moduleType: keyof ST_T,
-    path?: string,
-    customPath?: string
+    moduleName: keyof ST_T,
+    path: string,
   ) {
-    const { setState } = this.useAllStore(moduleType);
+    const { setState } = this.useAllStore(moduleName);
     try {
-      const result = await this.services.delete(
-        this.generateApi(moduleType, path, customPath)
-      );
+      const result = await this.services.delete(path);
       return result;
     } catch (err) {
       return err;
@@ -150,7 +137,10 @@ export default class Aos<
     }
   }
 
-  public onDelete(id: string | number, fn: (id: string | number) => void) {
+  public onDelete(id: string | number, fn: (id: string | number) => void, message: {
+    title: string;
+    text: string
+  }) {
     const { getState } = this.useDialog;
     const deleteFn = () => {
       fn(id);
@@ -158,8 +148,8 @@ export default class Aos<
     getState().setDeleteInfo({
       isOpen: true,
       info: {
-        title: 'Delete element',
-        text: 'Are you sure you want to delete this item?',
+        title: message?.title,
+        text: message?.text,
       },
       fn: deleteFn,
     });
@@ -168,11 +158,11 @@ export default class Aos<
   protected drawerAction<IN_T>({
     type,
     info,
-    moduleType,
+    moduleName,
     action,
     builderType,
   }: drawerAction<IN_T, keyof ST_T>) {
-    const { setState } = this.useAllStore(moduleType);
+    const { setState } = this.useAllStore(moduleName);
 
     setState({
       drawer: {
@@ -182,16 +172,6 @@ export default class Aos<
         builderType,
       },
     });
-  }
-
-  public generateApi(
-    moduleType: keyof ST_T,
-    path?: string,
-    customPath?: string
-  ) {
-    const url = customPath ? customPath : this.apiUrls[moduleType];
-    if (path) return url + path;
-    else return url;
   }
 
   public paginationConfig({

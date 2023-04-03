@@ -3,8 +3,10 @@ import { IErrorHandle } from "../../types";
 
 export class Messages {
   messageAlert: (message: string, type: "danger" | "success") => void;
+  logout: () => void;
   constructor(config: IErrorHandle) {
     this.messageAlert = config?.messageAlert;
+    this.logout = config?.logout
   }
   public errorHanle(error: any) {
     if (!error.response) {
@@ -12,13 +14,16 @@ export class Messages {
     }
     if (
       error.response?.data?.statusCode === 403 ||
-      error.response?.data?.statusCode  === 401 ||
       error.response?.data?.statusCode  === 404 ||
       error.response?.data?.statusCode  === 500 ||
       error.response?.data?.statusCode  === 400
     ) {
       this.messageAlert(error.response.data?.message, "danger");
       return;
+    }
+
+    if(error.response?.data?.statusCode  === 401) {
+      this.logout()
     }
 
     if (error.response?.data?.statusCode === 422) {

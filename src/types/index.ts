@@ -3,15 +3,15 @@ import { StoreApi, UseBoundStore } from 'zustand';
 
 export interface IErrorHandle {
   messageAlert: (message: string) => void;
+  logout: () => void;
 }
 type getParamsType = { [k: string]: string };
 
 export type getDataType<MD_T, AST_T> = {
   params?: getParamsType;
-  moduleType: MD_T;
+  moduleName: MD_T;
   stateName?: keyof AST_T;
-  path?: string;
-  customPath?: string;
+  path: string;
   setError?: (error: unknown) => void;
   ignoreError?: boolean;
 };
@@ -19,10 +19,9 @@ export type getDataType<MD_T, AST_T> = {
 export type createDataType<MD_T, AST_T> = {
   data: any;
   params?: getParamsType;
-  moduleType: MD_T;
+  moduleName: MD_T;
   stateName: keyof AST_T;
-  path?: string;
-  customPath?: string;
+  path: string;
 };
 
 export interface IShowSnakebar {
@@ -60,7 +59,7 @@ export type IAos_config<MD_T, ST_T, API_T> = {
 
 export type drawerAction<IN_T, MD_T> = {
   action: boolean;
-  moduleType: MD_T;
+  moduleName: MD_T;
   type: string;
   info?: IN_T;
   builderType?: string;

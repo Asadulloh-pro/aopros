@@ -20,7 +20,7 @@ export type createDataType<MD_T, AST_T> = {
   data: any;
   params?: getParamsType;
   moduleName: MD_T;
-  stateName: keyof AST_T;
+  stateName?: keyof AST_T;
   path: string;
 };
 
@@ -53,7 +53,6 @@ export interface IServices {
 export type IAos_config<MD_T, ST_T, API_T> = {
   services: IServices;
   store: (type: MD_T) => UseBoundStore<StoreApi<ST_T | StoreType>>;
-  apiUrls: API_T;
   useDialog: UseBoundStore<StoreApi<DeleteDialog>>;
 };
 

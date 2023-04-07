@@ -14,13 +14,16 @@ export type getDataType<MD_T, AST_T> = {
     path: string;
     setError?: (error: unknown) => void;
     ignoreError?: boolean;
+    loading?: string;
 };
 export type createDataType<MD_T, AST_T> = {
     data: any;
     params?: getParamsType;
     moduleName: MD_T;
-    stateName?: keyof AST_T;
+    stateName?: keyof AST_T | "drawer";
     path: string;
+    loading?: string;
+    refresh?: string;
 };
 export interface IShowSnakebar {
     title: string;

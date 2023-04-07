@@ -10,9 +10,7 @@ import {
   StoreType,
 } from '../types';
 
-export default class Aos<
-  ST_T
-> {
+export default class Aos<ST_T> {
   services: Services;
   useAllStore: (
     type: keyof ST_T
@@ -39,23 +37,22 @@ export default class Aos<
     stateName,
     path,
     setError,
-    ignoreError
+    ignoreError,
+    loading = 'loading',
   }: getDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
-    setState({ loading: true });
+    setState({ [loading]: true });
     try {
-      const response = await this.services.fetch(path,
-        {
-          params,
-        }
-      );
+      const response = await this.services.fetch(path, {
+        params,
+      });
       if (stateName) {
         setState({ [stateName]: response?.data });
       } else {
         return response?.data;
       }
     } catch (err) {
-      if(!ignoreError) {
+      if (!ignoreError) {
         if (setError) {
           setError(err);
         } else {
@@ -63,7 +60,7 @@ export default class Aos<
         }
       }
     } finally {
-      setState({ loading: false });
+      setState({ [loading]: false });
     }
   }
 
@@ -72,25 +69,32 @@ export default class Aos<
     moduleName,
     stateName,
     path,
+    loading,
+    refresh,
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
+    if (loading) setState({ [loading]: true });
     try {
-      const result = await this.services.create(path,
-        data
-      );
-      if (stateName) {
+      const result = await this.services.create(path, data);
+      if (stateName === 'drawer') {
         setState({
           [stateName]: {
             isOpen: false,
             type: '',
           },
         });
+      } else if (stateName) {
+        setState({
+          [stateName]: result,
+        });
       }
       return result;
     } catch (err) {
       return err;
     } finally {
-      setState((state: StoreType) => ({ refresh: !state.refresh }));
+      if (loading) setState({ [loading]: true });
+      if (refresh)
+        setState((state: StoreType) => ({ refresh: !state.refresh }));
     }
   }
 
@@ -99,48 +103,64 @@ export default class Aos<
     moduleName,
     stateName,
     path,
+    loading,
+    refresh,
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
-
+    if (loading) setState({ [loading]: true });
     try {
-      const result = await this.services.update(path,
-        data
-      );
-      if (stateName) {
+      const result = await this.services.update(path, data);
+      if (stateName === 'drawer') {
         setState({
           [stateName]: {
             isOpen: false,
             type: '',
           },
         });
+      } else if (stateName) {
+        setState({
+          [stateName]: result,
+        });
       }
       return result;
     } catch (err) {
       return err;
     } finally {
-      setState((state: StoreType) => ({ refresh: !state.refresh }));
+      if (loading) setState({ [loading]: true });
+      if (refresh)
+        setState((state: StoreType) => ({ refresh: !state.refresh }));
     }
   }
 
   public async deleteData(
     moduleName: keyof ST_T,
     path: string,
+    loading?: string,
+    refresh?: string
   ) {
     const { setState } = this.useAllStore(moduleName);
+    if (loading) setState({ [loading]: true });
     try {
       const result = await this.services.delete(path);
       return result;
     } catch (err) {
       return err;
     } finally {
-      setState((state: StoreType) => ({ refresh: !state.refresh }));
+      if (loading) setState({ [loading]: true });
+      setState((state: StoreType) => ({
+        [refresh || 'refresh']: !state.refresh,
+      }));
     }
   }
 
-  public onDelete(id: string | number, fn: (id: string | number) => void, message: {
-    title: string;
-    text: string
-  }) {
+  public onDelete(
+    id: string | number,
+    fn: (id: string | number) => void,
+    message: {
+      title: string;
+      text: string;
+    }
+  ) {
     const { getState } = this.useDialog;
     const deleteFn = () => {
       fn(id);

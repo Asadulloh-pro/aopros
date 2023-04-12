@@ -24,7 +24,7 @@ export type createDataType<MD_T, AST_T> = {
   stateName?: keyof AST_T | "drawer";
   path: string;
   loading?: string;
-  refresh?: string;
+  refresh?: keyof AST_T;
 };
 
 export interface IShowSnakebar {

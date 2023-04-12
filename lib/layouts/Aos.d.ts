@@ -11,7 +11,7 @@ export default class Aos<ST_T> {
     fetchData<T>({ params, moduleName, stateName, path, setError, ignoreError, loading, }: getDataType<keyof ST_T, T>): Promise<any>;
     postData<T>({ data, moduleName, stateName, path, loading, refresh, }: createDataType<keyof ST_T, T>): Promise<unknown>;
     putData<T>({ data, moduleName, stateName, path, loading, refresh, }: createDataType<keyof ST_T, T>): Promise<unknown>;
-    deleteData(moduleName: keyof ST_T, path: string, loading?: string, refresh?: string): Promise<unknown>;
+    deleteData(moduleName: keyof ST_T, path: string, loading?: string): Promise<unknown>;
     onDelete(id: string | number, fn: (id: string | number) => void, message: {
         title: string;
         text: string;

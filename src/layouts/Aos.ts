@@ -70,7 +70,7 @@ export default class Aos<ST_T> {
     stateName,
     path,
     loading,
-    refresh,
+    refresh = "refresh" as keyof T,
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
@@ -94,7 +94,7 @@ export default class Aos<ST_T> {
     } finally {
       if (loading) setState({ [loading]: true });
       if (refresh)
-        setState((state: StoreType) => ({ refresh: !state.refresh }));
+      setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
     }
   }
 
@@ -104,7 +104,7 @@ export default class Aos<ST_T> {
     stateName,
     path,
     loading,
-    refresh,
+    refresh = "refresh" as keyof T,
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
@@ -128,7 +128,7 @@ export default class Aos<ST_T> {
     } finally {
       if (loading) setState({ [loading]: true });
       if (refresh)
-        setState((state: StoreType) => ({ refresh: !state.refresh }));
+        setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
     }
   }
 
@@ -136,7 +136,6 @@ export default class Aos<ST_T> {
     moduleName: keyof ST_T,
     path: string,
     loading?: string,
-    refresh?: string
   ) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
@@ -148,7 +147,7 @@ export default class Aos<ST_T> {
     } finally {
       if (loading) setState({ [loading]: true });
       setState((state: StoreType) => ({
-        [refresh || 'refresh']: !state.refresh,
+        ["refresh"]: !state.refresh,
       }));
     }
   }

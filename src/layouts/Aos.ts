@@ -71,11 +71,12 @@ export default class Aos<ST_T> {
     path,
     loading,
     refresh = "refresh" as keyof T,
+    option = {}
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
     try {
-      const result = await this.services.create(path, data);
+      const result = await this.services.create(path, data, option);
       if (stateName === 'drawer') {
         setState({
           [stateName]: {
@@ -85,14 +86,14 @@ export default class Aos<ST_T> {
         });
       } else if (stateName) {
         setState({
-          [stateName]: result,
+          [stateName]: result?.data,
         });
       }
       return result;
     } catch (err) {
       return err;
     } finally {
-      if (loading) setState({ [loading]: true });
+      if (loading) setState({ [loading]: false });
       if (refresh)
       setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
     }
@@ -105,11 +106,12 @@ export default class Aos<ST_T> {
     path,
     loading,
     refresh = "refresh" as keyof T,
+    option = {}
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
     try {
-      const result = await this.services.update(path, data);
+      const result = await this.services.update(path, data, option);
       if (stateName === 'drawer') {
         setState({
           [stateName]: {
@@ -119,14 +121,14 @@ export default class Aos<ST_T> {
         });
       } else if (stateName) {
         setState({
-          [stateName]: result,
+          [stateName]: result?.data,
         });
       }
       return result;
     } catch (err) {
       return err;
     } finally {
-      if (loading) setState({ [loading]: true });
+      if (loading) setState({ [loading]: false });
       if (refresh)
         setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
     }
@@ -138,14 +140,15 @@ export default class Aos<ST_T> {
     loading?: string,
   ) {
     const { setState } = this.useAllStore(moduleName);
-    if (loading) setState({ [loading]: true });
+    this.useDialog.setState({buttonLoading: true})
     try {
       const result = await this.services.delete(path);
       return result;
     } catch (err) {
       return err;
     } finally {
-      if (loading) setState({ [loading]: true });
+      if (loading) setState({ [loading]: false });
+      this.useDialog.setState({buttonLoading: false})
       setState((state: StoreType) => ({
         ["refresh"]: !state.refresh,
       }));

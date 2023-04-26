@@ -1,4 +1,4 @@
-import { AxiosHeaders } from 'axios';
+import { AxiosHeaders, AxiosRequestConfig } from 'axios';
 import { StoreApi, UseBoundStore } from 'zustand';
 export interface IErrorHandle {
     messageAlert: (message: string) => void;
@@ -20,10 +20,11 @@ export type createDataType<MD_T, AST_T> = {
     data: any;
     params?: getParamsType;
     moduleName: MD_T;
-    stateName?: keyof AST_T | "drawer";
+    stateName?: keyof AST_T | 'drawer';
     path: string;
     loading?: string;
     refresh?: keyof AST_T;
+    option?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>;
 };
 export interface IShowSnakebar {
     title: string;
@@ -41,6 +42,7 @@ export type Delete = {
 export type DeleteDialog = {
     deleteInfo: Delete;
     setDeleteInfo: (state: Delete) => void;
+    buttonLoading?: boolean;
 };
 export interface IServices {
     headers?: AxiosHeaders;

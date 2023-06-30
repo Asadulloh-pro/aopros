@@ -67,6 +67,11 @@ export interface IFetch<T> {
     total_elements: number;
     total_pages: number;
 }
+export interface IPagination {
+    page_size: number;
+    total_elements: number;
+    total_pages: number;
+}
 export type StoreType = {
     data?: any | null;
     loading: boolean;

@@ -6,6 +6,7 @@ import {
   drawerAction,
   getDataType,
   IAos_config,
+  IPagination,
   NavigateFunction,
   StoreType,
 } from '../types';
@@ -70,8 +71,8 @@ export default class Aos<ST_T> {
     stateName,
     path,
     loading,
-    refresh = "refresh" as keyof T,
-    option = {}
+    refresh = 'refresh' as keyof T,
+    option = {},
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
@@ -95,7 +96,7 @@ export default class Aos<ST_T> {
     } finally {
       if (loading) setState({ [loading]: false });
       if (refresh)
-      setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
+        setState((state: StoreType & T) => ({ [refresh]: !state[refresh] }));
     }
   }
 
@@ -105,8 +106,8 @@ export default class Aos<ST_T> {
     stateName,
     path,
     loading,
-    refresh = "refresh" as keyof T,
-    option = {}
+    refresh = 'refresh' as keyof T,
+    option = {},
   }: createDataType<keyof ST_T, T>) {
     const { setState } = this.useAllStore(moduleName);
     if (loading) setState({ [loading]: true });
@@ -137,10 +138,10 @@ export default class Aos<ST_T> {
   public async deleteData(
     moduleName: keyof ST_T,
     path: string,
-    loading?: string,
+    loading?: string
   ) {
     const { setState } = this.useAllStore(moduleName);
-    this.useDialog.setState({buttonLoading: true})
+    this.useDialog.setState({ buttonLoading: true });
     try {
       const result = await this.services.delete(path);
       return result;
@@ -148,9 +149,9 @@ export default class Aos<ST_T> {
       return err;
     } finally {
       if (loading) setState({ [loading]: false });
-      this.useDialog.setState({buttonLoading: false})
+      this.useDialog.setState({ buttonLoading: false });
       setState((state: StoreType) => ({
-        ["refresh"]: !state.refresh,
+        ['refresh']: !state.refresh,
       }));
     }
   }
@@ -216,12 +217,12 @@ export default class Aos<ST_T> {
     }
   }
 
-  public tableConfig({
+  public tableConfig<T>({
     searchParams,
     data,
   }: {
     searchParams: { [k: string]: string | number };
-    data: { [k: string]: string | number };
+    data: IPagination;
   }): {
     total: number;
     pageIndex: number;

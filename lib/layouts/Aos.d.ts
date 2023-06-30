@@ -1,6 +1,6 @@
 import { StoreApi, UseBoundStore } from 'zustand';
 import { Services } from '../services';
-import { createDataType, DeleteDialog, drawerAction, getDataType, IAos_config, NavigateFunction, StoreType } from '../types';
+import { createDataType, DeleteDialog, drawerAction, getDataType, IAos_config, IPagination, NavigateFunction, StoreType } from '../types';
 export default class Aos<ST_T> {
     services: Services;
     useAllStore: (type: keyof ST_T) => UseBoundStore<StoreApi<ST_T[keyof ST_T] | StoreType>>;
@@ -9,8 +9,8 @@ export default class Aos<ST_T> {
         [P in keyof ST_T]: string;
     }>);
     fetchData<T>({ params, moduleName, stateName, path, setError, ignoreError, loading, }: getDataType<keyof ST_T, T>): Promise<any>;
-    postData<T>({ data, moduleName, stateName, path, loading, refresh, option }: createDataType<keyof ST_T, T>): Promise<unknown>;
-    putData<T>({ data, moduleName, stateName, path, loading, refresh, option }: createDataType<keyof ST_T, T>): Promise<unknown>;
+    postData<T>({ data, moduleName, stateName, path, loading, refresh, option, }: createDataType<keyof ST_T, T>): Promise<unknown>;
+    putData<T>({ data, moduleName, stateName, path, loading, refresh, option, }: createDataType<keyof ST_T, T>): Promise<unknown>;
     deleteData(moduleName: keyof ST_T, path: string, loading?: string): Promise<unknown>;
     onDelete(id: string | number, fn: (id: string | number) => void, message: {
         title: string;
@@ -28,13 +28,11 @@ export default class Aos<ST_T> {
         };
         url: string;
     }): void;
-    tableConfig({ searchParams, data, }: {
+    tableConfig<T>({ searchParams, data, }: {
         searchParams: {
             [k: string]: string | number;
         };
-        data: {
-            [k: string]: string | number;
-        };
+        data: IPagination;
     }): {
         total: number;
         pageIndex: number;
